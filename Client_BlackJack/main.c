@@ -11,4 +11,8 @@ int main()
 
     zmq_connect(pusher, "tcp://benternet.pxl-ea-ict.be:24041");
     zmq_connect(sub, "tcp://benternet.pxl-ea-ict.be:24042");
+
+    char pushName[] = "game>blackjack>AbadS>";
+
+
 }

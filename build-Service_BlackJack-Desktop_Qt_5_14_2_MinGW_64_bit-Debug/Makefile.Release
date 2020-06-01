@@ -101,7 +101,8 @@ compiler_clean:
 
 ####### Compile
 
-release/main.o: ../Service_BlackJack/main.c ../include/zmq.h
+release/main.o: ../Service_BlackJack/main.c ../Service_BlackJack/zhelpers.h \
+		../include/zmq.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o release\main.o ..\Service_BlackJack\main.c
 
 ####### Install

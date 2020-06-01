@@ -223,6 +223,7 @@ Makefile: ../Service_BlackJack/Service_BlackJack.pro ../../QT/5.14.2/mingw73_64/
 		../../QT/5.14.2/mingw73_64/mkspecs/features/qt_config.prf \
 		../../QT/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		../../QT/5.14.2/mingw73_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../QT/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		../../QT/5.14.2/mingw73_64/mkspecs/features/toolchain.prf \
 		../../QT/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
@@ -241,7 +242,6 @@ Makefile: ../Service_BlackJack/Service_BlackJack.pro ../../QT/5.14.2/mingw73_64/
 		../../QT/5.14.2/mingw73_64/mkspecs/features/yacc.prf \
 		../../QT/5.14.2/mingw73_64/mkspecs/features/lex.prf \
 		../Service_BlackJack/Service_BlackJack.pro \
-		.qmake.stash \
 		../../QT/5.14.2/mingw73_64/mkspecs/features/build_pass.prf
 	$(QMAKE) -o Makefile ..\Service_BlackJack\Service_BlackJack.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 ../../QT/5.14.2/mingw73_64/mkspecs/features/spec_pre.prf:
@@ -397,6 +397,7 @@ Makefile: ../Service_BlackJack/Service_BlackJack.pro ../../QT/5.14.2/mingw73_64/
 ../../QT/5.14.2/mingw73_64/mkspecs/features/qt_config.prf:
 ../../QT/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf:
 ../../QT/5.14.2/mingw73_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../QT/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 ../../QT/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 ../../QT/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
@@ -415,7 +416,6 @@ Makefile: ../Service_BlackJack/Service_BlackJack.pro ../../QT/5.14.2/mingw73_64/
 ../../QT/5.14.2/mingw73_64/mkspecs/features/yacc.prf:
 ../../QT/5.14.2/mingw73_64/mkspecs/features/lex.prf:
 ../Service_BlackJack/Service_BlackJack.pro:
-.qmake.stash:
 ../../QT/5.14.2/mingw73_64/mkspecs/features/build_pass.prf:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\Service_BlackJack\Service_BlackJack.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"

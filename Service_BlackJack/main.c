@@ -1,21 +1,13 @@
-/*#include <stdio.h>
+#include "zhelpers.h"
+#include <unistd.h>
+#include <string.h>
 #include <zmq.h>
-int main()
-{
-    void *context = zmq_ctx_new ();
-    void *pusher = zmq_socket (context, ZMQ_PUSH);
-    void *sub = zmq_socket(context, ZMQ_SUB);
-
-    zmq_connect(pusher, "tcp://benternet.pxl-ea-ict.be:24041");
-    zmq_connect(sub, "tcp://benternet.pxl-ea-ict.be:24042");
-
-    char subClient[] =  "game>blackjack>";
-
-}*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-void MainGame();
+
+/*Declaring all the functions*/
+//void MainGame();
 void cardVal1();
 void cardVal2();
 void cardVal3();
@@ -32,21 +24,47 @@ void cardVal13();
 
 int main(void)
 {
- MainGame();
-}
+    /*Connection initialization to Benthernet Broker*/
+    void *context = zmq_ctx_new ();
+    void *pusher = zmq_socket (context, ZMQ_PUSH);
+    void *sub = zmq_socket(context, ZMQ_SUB);
 
-void MainGame()
-{
+    zmq_connect(pusher, "tcp://benternet.pxl-ea-ict.be:24041");
+    zmq_connect(sub, "tcp://benternet.pxl-ea-ict.be:24042");
+
+
+    char pushTopic[] = "game>blackjack>Task>";
+    char subTopic[] = "game>blackjack>Answer>";
+    char buffer[256];
+   // char *parsedVal;
+
+    zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subTopic, strlen(buffer));
+
+    //s_send(pusher, pushTopic);
+
+
     int rndCard,gameScore = 0,blackJackAgreement,placeCard;
     srand(time(NULL));
-    printf("Do you want to play the game?\n1 = proceed & 0 = exit\n\n");
-    scanf("%d",&blackJackAgreement);
+    printf("String sent\n");
+    strncpy(buffer, pushTopic, 22);
+    strncat(buffer, "Do you want to play the game?\n1 = proceed & 0 = exit\n\n", 128);
+    s_send(pusher, buffer);
+
+
+    zmq_recv(sub, buffer, 256, 0);
+    //parsedVal = strchr()
+    //scanf("%d",&blackJackAgreement);
+
+
+    zmq_recv(sub, buffer, 256, 0);
+
     printf("\n");
+
 
     if(blackJackAgreement > 1 )
     {
         printf("Please choose 1 or 0\n1 is to play & 0 is to exit\n\n");
-        printf("Do you want to play the game?\n1 = proceed & 0 = exit\n");
+        printf("\n1 = proceed & 0 = exit\n");
 
     scanf("%d",&blackJackAgreement);
     }
@@ -144,11 +162,11 @@ void MainGame()
             printf("\nYOU LOST ALL OF YOUR MONEY!!!!\n");
             printf("Do you want to try again\n");
             scanf("%d",&blackJackAgreement);
-            printf("Do you want to place a card?\n\n");
+           // printf("Do you want to place a card?\n\n");
             gameScore = 0;
             //break;
         }
-        printf("Do you want to place a card?");
+        printf("Do you want to place a card? ");
         scanf("%d",&placeCard);
         if (placeCard == 0 || placeCard >1)
         {
@@ -158,9 +176,18 @@ void MainGame()
         }
     }
 
-
-
+     return 0;
 }
+
+/*
+void MainGame()
+{
+
+}*/
+
+
+/*Cards from 1 to 13*/
+
 void cardVal1()
 {
     printf(" _______ \n"

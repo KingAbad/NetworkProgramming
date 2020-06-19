@@ -29,56 +29,55 @@ int main(void)
     void *pusher = zmq_socket (context, ZMQ_PUSH);
     void *sub = zmq_socket(context, ZMQ_SUB);
 
+    /*All used vars*/
+    char buffer[256]  = {'\0'}; //buffer for messages to sent to the client
+    char buffer2[256] = {'\0'}; //buffer for messages to sent to the client
+    char buffer3[256] = {'\0'}; //buffer for messages to sent to the client
+    int stringToInt;
+    int blackJackAgreement = 0;
+    int rndCard,gameScore = 0,placeCard;
+    char *p;
+    char *pMod;
+
+    /*Connecting to the broker*/
     zmq_connect(pusher, "tcp://benternet.pxl-ea-ict.be:24041");
     zmq_connect(sub, "tcp://benternet.pxl-ea-ict.be:24042");
 
-    char buffer[256]; //buffer for messages to sent to the client
-    char buffer2[256]; //buffer for messages to sent to the client
-    char *p;
-    char *pMod; //after the < charachter
-    int convertedToString;
-
+    /*Sub en Push protocol*/
     char pushtask[]     = "Blackjack?<task<Abad>"; //The question to be asked the client
     char subanswer[]    = "Blackjack!<answer<Abad>";
-
+    zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(buffer2));
     //char pushanswer[]   = "Blackjack!>Abad>";
     //char subtask[]      = "Blackjack?>Abad>";
 
-  //  zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(buffer));
-
-    //s_send(pusher, pushtask);
-    int blackJackAgreement = 0;
-    int rndCard,gameScore = 0,placeCard;
-    int sendMessage =1;
     printf("SERVICE STARTED SUCESSFULLY\n\n");
     srand(time(NULL));
 
+     if(strncmp(s_recv(sub), "Blackjack",9 )){
+    /*Message to the client*/
     strncpy(buffer, pushtask, 22);
     strncat(buffer, "Do you want to play the game?\n1 = proceed & 0 = exit\n\n", 128);
     s_send(pusher, buffer);
+    }
 
-    //parsedVal = strchr()
-    //scanf("%d",&blackJackAgreement);
-    /*if(blackJackAgreement > 1 )
-    {
-        printf("Please choose 1 or 0\n1 is to play & 0 is to exit\n\n");
-        printf("\n1 = proceed & 0 = exit\n");
-
-    scanf("%d",&blackJackAgreement);
-    }*/
-
+    /*Message received*/
+     if(strncmp(s_recv(sub), "Blackjack",9 )){
     zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(buffer2));
     zmq_recv(sub, buffer2, 256, 0);
+    printf("%s \n", buffer2);
     p = strchr(buffer2,'>');
     pMod = p+1;
-    printf("%s \n",buffer2);
-    convertedToString = atoi(pMod);
-    //printf("%c \n",pMod);
-    blackJackAgreement = convertedToString;
-
+    stringToInt = atoi(pMod);
+    blackJackAgreement = stringToInt;
+     }
     if(blackJackAgreement == 1)
     {
-        printf("GOODLUCK!\n");
+        /*Message to the client*/
+        //sprintf(buffer,"");
+        strncpy(buffer3, pushtask, 22);
+        strncat(buffer3, "GOODLUCK!\n", 128);
+        s_send(pusher, buffer3);
+        //printf("GOODLUCK!\n");
          while(gameScore <=21)
         {
         rndCard = rand()%13+1;
@@ -190,7 +189,6 @@ int main(void)
 /*
 void MainGame()
 {
-
 }*/
 
 
@@ -329,4 +327,3 @@ void cardVal13()
            "|       |\n"
            "|_______|\n");
 }
-

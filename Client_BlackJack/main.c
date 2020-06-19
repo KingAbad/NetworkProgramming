@@ -14,45 +14,44 @@ int main()
     void *pusher = zmq_socket (context, ZMQ_PUSH);
     void *sub = zmq_socket(context, ZMQ_SUB);
 
+    /*All used var*/
+    char buffer[256] = {'\0'}; //buffer where the received message is stored in
+    char buffer2[256] = {'\0'}; //buffer where the received message is stored in
+    char buffer3[256] = {'\0'}; //buffer for messages to sent to the client
+    char scanVar[1];
+
     zmq_connect(pusher, "tcp://benternet.pxl-ea-ict.be:24041"); //push
     zmq_connect(sub, "tcp://benternet.pxl-ea-ict.be:24042");    //pull
 
-    char subtask[]      = "Blackjack?<task>"; //Subscribed to the question asked by the service
-
-    char buffer[256]; //buffer where the received message is stored in
-    char buffer2[17] = {'\0'};; //buffer where the received message is stored in
-    char scanVar[20];
-
-    char pushanswer[]   = "Blackjack!<Abad>";
-    //char pushtask[] = "Blackjack?<Abad>";
-    //char subanswer[]= "example>answer!>EduardoB!!>";
-
-
-    char *rqbuf = NULL;
-    char *itoabuf = NULL;
-    char *rcvbuf = "blablabla";
+    char subtask[]      = "Blackjack?<task<"; //Subscribed to the question asked by the service
+    char pushanswer[]   = "Blackjack!<answer<";
 
     zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subtask, strlen(buffer));
 
-
-    /*Prints the first message*/
+    if(strncmp(s_recv(sub), "Blackjack",9 )){
+    /*Prints the message received from the service*/
     zmq_recv(sub, buffer, 256, 0);
-    printf("%s", buffer);
+    printf("%s", buffer);}
 
+     if(strncmp(s_recv(sub), "Blackjack",9 )){
     /*Reply to the service*/
     scanf("%c", &scanVar);
-    strncpy(scanVar, pushanswer , 128);
-    s_send(pusher, scanVar);
+    strncpy(buffer2, pushanswer , 22);
+    strncat(buffer2, scanVar,1);
+    printf("%s \n", buffer2);
+    //printf("%zu", strlen(buffer2));
+    s_send(pusher, buffer2);
+     }
 
-    //zmq_send(pusher,)
-
-    //strncpy(buffer, pubTopic, 22);
-
-   // scanf("%c", scanVar);
-    //strncat(buffer, scanVar , 128);
-    //s_send(pusher, buffer);*/
+     if(strncmp(s_recv(sub), "Blackjack",9 )){
+    /*Prints the message received from the service*/
+    zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subtask, strlen(buffer3));
+    //sprintf(buffer,"");
+    zmq_recv(sub, buffer3, 256, 0);
+    printf("%s", buffer3);
+    //sprintf(buffer,"%s",s_recv(sub));
+     }
 
 
     return 0;
-
 }

@@ -32,42 +32,50 @@ int main(void)
     zmq_connect(pusher, "tcp://benternet.pxl-ea-ict.be:24041");
     zmq_connect(sub, "tcp://benternet.pxl-ea-ict.be:24042");
 
+    char buffer[256]; //buffer for messages to sent to the client
+    char buffer2[256]; //buffer for messages to sent to the client
+    char *p;
+    char *pMod; //after the < charachter
+    int convertedToString;
 
-    char pushTopic[] = "game>blackjack>Task>";
-    char subTopic[] = "game>blackjack>Answer>";
-    char buffer[256];
-   // char *parsedVal;
+    char pushtask[]     = "Blackjack?<task<Abad>"; //The question to be asked the client
+    char subanswer[]    = "Blackjack!<answer<Abad>";
 
-    zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subTopic, strlen(buffer));
+    //char pushanswer[]   = "Blackjack!>Abad>";
+    //char subtask[]      = "Blackjack?>Abad>";
 
-    //s_send(pusher, pushTopic);
+  //  zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(buffer));
 
-
-    int rndCard,gameScore = 0,blackJackAgreement,placeCard;
+    //s_send(pusher, pushtask);
+    int blackJackAgreement = 0;
+    int rndCard,gameScore = 0,placeCard;
+    int sendMessage =1;
+    printf("SERVICE STARTED SUCESSFULLY\n\n");
     srand(time(NULL));
-    printf("String sent\n");
-    strncpy(buffer, pushTopic, 22);
+
+    strncpy(buffer, pushtask, 22);
     strncat(buffer, "Do you want to play the game?\n1 = proceed & 0 = exit\n\n", 128);
     s_send(pusher, buffer);
 
-
-    zmq_recv(sub, buffer, 256, 0);
     //parsedVal = strchr()
     //scanf("%d",&blackJackAgreement);
-
-
-    zmq_recv(sub, buffer, 256, 0);
-
-    printf("\n");
-
-
-    if(blackJackAgreement > 1 )
+    /*if(blackJackAgreement > 1 )
     {
         printf("Please choose 1 or 0\n1 is to play & 0 is to exit\n\n");
         printf("\n1 = proceed & 0 = exit\n");
 
     scanf("%d",&blackJackAgreement);
-    }
+    }*/
+
+    zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(buffer2));
+    zmq_recv(sub, buffer2, 256, 0);
+    p = strchr(buffer2,'>');
+    pMod = p+1;
+    printf("%s \n",buffer2);
+    convertedToString = atoi(pMod);
+    //printf("%c \n",pMod);
+    blackJackAgreement = convertedToString;
+
     if(blackJackAgreement == 1)
     {
         printf("GOODLUCK!\n");

@@ -47,7 +47,7 @@ Make sure you have the include en lib in the same directory as your project fold
 
 ## Built With
 
-* [QT Creator](https://www.qt.io/download)       - Programming environment used for programming the game
+* [QT Creator](https://www.qt.io/download)              - Programming environment used for programming the game
 * [Notepad++](https://notepad-plus-plus.org/downloads/) -  Programming environment used for quick debugging
 
 

@@ -14,11 +14,9 @@ ZMQbroker_localhost.exe        Executable for ZMQbroker localhost
 ```
 
 ## How to set things up
-<details> 
+
   
 ## Opening the broker
-
-<details>
  
 **Step by step guide**
 * For a localhost connection make sure your ZMQ connection is as step 2 and 3
@@ -34,7 +32,6 @@ You have to have all three executables up and running in order for it to work.
 
 ## How to compile the game
 
-<details>
  
 **Step by step guide**
 * Open the QT programming environment
@@ -47,7 +44,6 @@ You have to have all three executables up and running in order for it to work.
 
 **Note:**
 Make sure you have the include en lib in the same directory as your project folder.
-</details> 
 
 ## Built With
 

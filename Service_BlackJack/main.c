@@ -52,10 +52,15 @@ int main(void)
     char buffer20[256]; //buffer for messages to sent to the client
     char buffer21[256]; //buffer for messages to sent to the client
     char buffer22[256]; //buffer for messages to sent to the client
+    char buffer23[256]; //buffer for messages to sent to the client
+    char buffer24[256]; //buffer for messages to sent to the client
+    char buffer25[256]; //buffer for messages to sent to the client
+
     //char buffer23[256]; //buffer for messages to sent to the client
 
     int stringToInt;
     int blackJackAgreement = 0;
+    int scoreToBeat = 17;
     int rndCard,gameScore = 0,placeCard;
     char *p;
     char *pMod;
@@ -71,6 +76,7 @@ int main(void)
     //char subtask[]      = "Blackjack?<task<Abad>"; //Is the same as the pushed TASK
     char pushanswerCard[] = "Blackjack!<answer<card>";
 
+    zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(subanswer));
     zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(subanswer));
     zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(subanswer));
     //zmq_setsockopt(sub, ZMQ_SUBSCRIBE, subanswer, strlen(subanswer));
@@ -241,9 +247,14 @@ int main(void)
         strncat(buffer20, "Just do it if you're feeling lucky!\n", 128);
         s_send(pusher, buffer20);*/
         printf("your current score is %d\n",gameScore);
-        //if (gameScore >21)
-        //{
+        if (gameScore >21)
+        {
             //printf("\nYOU LOST ALL OF YOUR MONEY!!!!\n");
+
+
+            /*strncpy(buffer23, pushanswer, 100);
+            strncat(buffer23, "\nYOU LOST ALL OF YOUR MONEY!!!!\n", 46);
+            s_send(pusher, buffer23);*/
 
             /*strncpy(buffer21, pushanswer, 100);
             strncat(buffer21, "Do you want to try again\n", 128);
@@ -261,10 +272,16 @@ int main(void)
 
            // printf("Do you want to place a card?\n\n");
            // gameScore = 0;
-            //break;
-        //}
+            strncpy(buffer25, pushanswer, 100);
+            //40 chars
+            strncat(buffer25, "\nYOU LOST THE BET\n", 128);
+            s_send(pusher, buffer25);
+
+           break;
+
+        }
         strncpy(buffer21, pushanswer,100);
-        strncat(buffer21, "Do you want to place a card?\n",128);
+        strncat(buffer21, "Do you want to place a card?",128);
         s_send(pusher, buffer21);
 
 
@@ -281,10 +298,23 @@ int main(void)
        // printf(".");
 
         //scanf("%d",&placeCard);
-       /* if (placeCard == 0 || placeCard >1)
+        if (placeCard == 2 && gameScore > scoreToBeat)
         {
+            strncpy(buffer23, pushanswer, 100);
+            strncat(buffer23, "\nYOU WON THE BET\n", 46);
+            s_send(pusher, buffer23);
+
             break;
-        }*/
+        }
+        else if(placeCard == 2 && gameScore < scoreToBeat)
+       {
+           strncpy(buffer24, pushanswer, 100);
+           //40 chars
+           strncat(buffer24, "\nYOU LOST THE BET\n", 128);
+           s_send(pusher, buffer24);
+            break;
+       }
+
 
         }
     }
@@ -345,7 +375,7 @@ const char* cardVal7()
 
 const char* cardVal8()
 {
- static char card8[62]= "\n _______ \n|        |\n|       |\n|   8   |\n|       |\n|_______|\n";
+ static char card8[62]= "\n _______ \n|       |\n|       |\n|   8   |\n|       |\n|_______|\n";
     return card8;
 }
 const char* cardVal9()
